@@ -608,9 +608,14 @@ fi
 
 if [[ ${p_prune-0} == 1 ]]
 then
-    $receiver remove-snapshots "$dest_root" "${only_in_dest[@]}"
-    if [[ $p_link -eq 1 ]]
+    if [[ $num_src_snapshots -gt 0 ]]
     then
-        $receiver link-latest "$dest_root"
+        $receiver remove-snapshots "$dest_root" "${only_in_dest[@]}"
+        if [[ $p_link -eq 1 ]]
+        then
+            $receiver link-latest "$dest_root"
+        fi
+    else
+        warning "Prune skipped - need atleast one source snapshot"
     fi
 fi
